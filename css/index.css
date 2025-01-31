@@ -1,0 +1,104 @@
+/* overall styles and default/desktop layout */
+* { 
+  box-sizing: border-box; 
+}
+
+#wrapper {
+  margin: auto;
+  width: 70%;
+}
+
+body {
+  /* background-color: navajowhite; */
+  background-image: url("../images/background2.jpeg");
+  background-repeat: no-repeat;    /* Prevents tiling of the image */
+  background-position: center;     /* Centers the image */
+  background-size: cover;         /* Scales the image to cover the container */
+  color: rgb(5, 5, 130);
+  font-family: "Arsenal SC", sans-serif;
+  font-size: 20px; 
+  margin: 0;
+  padding-top: 125px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Caveat', cursive;
+  font-weight: bold;
+  color: navy;
+}
+
+h1 {
+  color: navajowhite;
+}
+
+/* header and navigation */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 0;
+  background-color: #334f77;
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+nav ul {
+  display: flex;
+  padding: 0;
+  justify-content: center;
+  list-style: none;
+}
+
+nav li {
+  margin: 0 1em;
+}
+
+nav a {
+  color: navajowhite;
+  font-weight: bold;
+  text-decoration: none; 
+  padding: .25em 0;
+}
+
+.current-page {
+  border-bottom: 1px solid navajowhite;
+}
+
+nav a:hover {
+  color: #00ddff;
+}
+
+/* page title */
+#about,
+h1,
+img {
+  text-align: center;
+  margin: auto;
+  display: block;
+}
+
+#beach-walk {
+  border: 3px solid navy;
+  border-radius: 50%;
+  box-shadow: 0 3px 20px rgba(0, 0, 0, 0.5);
+}
+
+section,
+#about {
+  background-color: #858282;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  padding: 20px;
+}
+
+/* moving the image and about section side by side */
+.name-about {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 2fr;
+}
+

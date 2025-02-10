@@ -10,7 +10,7 @@
 
 body {
   /* background-color: navajowhite; */
-  background-image: url("../images/background2.jpeg");
+  background-image: url("../images/background.jpeg");
   background-repeat: no-repeat;    /* Prevents tiling of the image */
   background-position: center;     /* Centers the image */
   background-size: cover;         /* Scales the image to cover the container */
@@ -19,6 +19,7 @@ body {
   font-size: 20px; 
   margin: 0;
   padding-top: 125px;
+  min-height: 100vh;
 }
 
 h1,
@@ -30,7 +31,7 @@ h3 {
 }
 
 h1 {
-  color: navajowhite;
+  color: #334f77;
 }
 
 /* header and navigation */
@@ -101,4 +102,3 @@ section,
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 2fr;
 }
-

@@ -3,10 +3,15 @@ This JavaScript code fetches a list of artworks and it's artists details from th
 Users can navigate between the artworks list and artist details using buttons. Clicking on the artwork image opens the details in a new window. 
 */
 
+function stripHTML(html) {
+  //removes all html tags
+  return html.replace(/<[^>]*>?/gm, '');
+}
+
 //fetching artworks
 async function fetchArtworks() {
   try {
-    const response = await fetch('https://api.artic.edu/api/v1/artworks?limit=10&fields=id,title,description,image_id');
+    const response = await fetch('https://api.artic.edu/api/v1/artworks?limit=20&fields=id,title,description,image_id');
     if(!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -26,9 +31,12 @@ async function fetchArtworks() {
 }//closes the fetchArtworks() function
 
 //fetching artists and their details
+//adding functionality to have a link tot he artwork if there is no image
+
+
 async function fetchArtists() {
   try {
-    const response = await fetch('https://api.artic.edu/api/v1/agents?limit=15&fields=id,title,description');
+    const response = await fetch('https://api.artic.edu/api/v1/agents?limit=20&fields=id,title,description');
     if(!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -78,41 +86,45 @@ Function takes in a list of artwork, loops through each and displays them as a c
 function displayCollections(artworks) {
   //finds the container with the ID of "container" where the artwork will be displayed
   const container = document.getElementById("container");
-  //needed to clear the container to refresh the list
-  container.innerHTML = '';
+  container.innerHTML = '';//clear previous content
 
-  //looping through the artworks, taking one piece at a time and creates a card for it 
+  //looping through artworks, processing one at a time
   artworks.forEach(artwork => {
     const card = document.createElement("div");
-    //create associated classes in the html...
-    card.classList.add("card");
+    card.classList.add("card");//create classes
+
     //setting up the title on the card
     const title = document.createElement("h3");
     title.innerText = artwork.title || "Untitled";
     card.appendChild(title);
-    //it seams like this is pulling in some html with the description...
-    if(artwork.description) {
-      const description = document.createElement("p");
-      description.innerText = artwork.description;
-      card.appendChild(description);
-    }
-    //checking that an image is available then adds the deeded html, then making the image clickable to get the information on the piece
+
     if(artwork.image_id) {
+      //if image available, add clickable image
       const img = document.createElement("img");
       img.src = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/200,/0/default.jpg`;
       img.alt = artwork.title || "Artwork Image";
-      img.style.cursor = "pointer";//this changes the pointer so it is clear its clickable
+      img.style.cursor = "pointer";//change cursor to show clickability
 
-      //this opens the information on the page but later will be opened in it's own page....
+      //clicking image fetches more details
       img.addEventListener("click", () => {
-        //call to the fetchArtworkDetails() function for the single artwork
         fetchArtworkDetails(artwork.id);
       });//closes the event listener
+
       card.appendChild(img);
+    } else {
+      // If no image is available, show a placeholder message and a link
+      const placeholder = document.createElement("div");
+      placeholder.classList.add("no-image");
+      placeholder.innerHTML = `
+        <p>No image available</p>
+        <a href="https://www.artic.edu/artworks/${artwork.id}" target="_blank">View Artwork at Art Institute of Chicago</a>
+      `;
+      card.appendChild(placeholder);
     }
-    //adding the card to the container...
+
     container.appendChild(card);
   });//loop ends after all artwork has been processed 
+  
 }//closes displayCollections() function 
 
 /*
@@ -131,7 +143,8 @@ function displayArtworkDetails(artwork) {
 
   if(artwork.description) {
     const description = document.createElement("p");
-    description.innerText = artwork.description;
+    //strips the html from the description
+    description.textContent = stripHTML(artwork.description);
     detailsCard.appendChild(description);
   }
 
@@ -176,7 +189,7 @@ function displayArtists(artists) {
 
     if(artist.description) {
       const description = document.createElement("p");
-      description.innerText = artist.description;
+      description.textContent = stripHTML(artist.description);
       card.appendChild(description);
     }//ends if
     container.appendChild(card);
@@ -193,13 +206,6 @@ function displayError(message) {
   errorMessage.innerText = message;
   container.appendChild(errorMessage);
 }//ending the displayErrors(message) function 
-
-//temporarily displays a loading message, not working so i took it out... adding it later... 
-//this is not loading....
-function displayLoading() {
-  const container = document.getElementById("container");
-  container.innerHTML = '<p>Loading...</p>';
-}
 
 //adding event listeners to buttons with corresponding id
 document.getElementById("show-artworks").addEventListener("click", () => {
